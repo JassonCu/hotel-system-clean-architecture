@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using System.Data;
 
-namespace Clinical.Persistence.Context
+namespace Hotel.Persistence.Context
 {
     public class ApplicationDBContext
     {
