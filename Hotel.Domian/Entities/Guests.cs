@@ -1,20 +1,18 @@
-﻿namespace Hotel.Domian.Entities
+﻿namespace Hotel.Domain
 {
-    public class Employees
+    public class Guest
     {
-        public int EmployeeID { get; set; }
+        public int GuestID { get; set; }
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
-        public string? Position { get; set; }
+        public DateTime? DateOfBirth { get; set; }
         public string? PhoneNumber { get; set; }
         public string? Email { get; set; }
-        public DateTime? HireDate { get; set; }
-        public decimal? Salary { get; set; }
         public string? Address { get; set; }
         public string? City { get; set; }
         public string? State { get; set; }
         public string? PostalCode { get; set; }
         public string? Country { get; set; }
-        public EmployeeStates? EmployeeState { get; set; }
+        public string? Nationality { get; set; }
     }
 }
