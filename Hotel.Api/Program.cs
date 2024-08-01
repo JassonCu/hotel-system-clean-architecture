@@ -1,4 +1,5 @@
 using Hotel.Persistence.Extensions;
+using Hotel.UseCases.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +11,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddInyectionPersistence();
+builder.Services.AddInyectionApplication();
 
 var app = builder.Build();
 
