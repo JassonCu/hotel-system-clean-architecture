@@ -4,6 +4,6 @@ namespace Hotel.Interface.Interfaces
 {
     public interface IEmployeesRepository
     {
-        Task<IEnumerable<Employees>> ListEmployees();
+        Task<IEnumerable<Employee>> ListEmployees();
     }
 }

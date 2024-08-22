@@ -6,7 +6,7 @@ using MediatR;
 
 namespace Hotel.UseCases.Employees.Queries.GetAllQuery
 {
-    public class GetAllEmployeesHandler : IRequestHandler<GetAllEmployeeQuery, BaseResponse<IEnumerable<GetEmployeesReponseDto>>>
+    public class GetAllEmployeesHandler : IRequestHandler<GetAllEmployeeQuery, BaseResponse<IEnumerable<GetEmployeesResponseDto>>>
     {
         private readonly IEmployeesRepository _employeesRepository;
         private readonly IMapper _mapper;
@@ -17,9 +17,9 @@ namespace Hotel.UseCases.Employees.Queries.GetAllQuery
             _mapper = mapper;
         }
 
-        public async Task<BaseResponse<IEnumerable<GetEmployeesReponseDto>>> Handle(GetAllEmployeeQuery request, CancellationToken cancellationToken)
+        public async Task<BaseResponse<IEnumerable<GetEmployeesResponseDto>>> Handle(GetAllEmployeeQuery request, CancellationToken cancellationToken)
         {
-            var response = new BaseResponse<IEnumerable<GetEmployeesReponseDto>>();
+            var response = new BaseResponse<IEnumerable<GetEmployeesResponseDto>>();
 
             try
             {
@@ -27,7 +27,7 @@ namespace Hotel.UseCases.Employees.Queries.GetAllQuery
                 if(employees is not null)
                 {
                     response.IsSuccess = true;
-                    response.Data = _mapper.Map<IEnumerable<GetEmployeesReponseDto>>(employees);
+                    response.Data = _mapper.Map<IEnumerable<GetEmployeesResponseDto>>(employees);
                     response.Message = "Consulta Exitosa";
                 }
             }
