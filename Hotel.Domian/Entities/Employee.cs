@@ -17,7 +17,7 @@ public partial class Employee
 
     public string? Email { get; set; }
 
-    public DateOnly? HireDate { get; set; }
+    public DateTime? HireDate { get; set; }
 
     public decimal? Salary { get; set; }
 
