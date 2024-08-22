@@ -9,7 +9,7 @@ namespace Hotel.Persistence.Extensions
     {
         public static IServiceCollection AddInyectionPersistence(this IServiceCollection services)
         {
-            services.AddSingleton<ApplicationDBContext>();
+            services.AddScoped<ApplicationDbContext>();
             services.AddScoped<IEmployeesRepository, EmployeesRepositories>();
 
             return services;
