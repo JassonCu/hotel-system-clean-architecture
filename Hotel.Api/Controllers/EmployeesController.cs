@@ -1,4 +1,4 @@
-﻿using Hotel.UseCases.Employees.Queries.GetAllQuery;
+﻿using Hotel.Interface.Interfaces;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,18 +9,27 @@ namespace Hotel.Api.Controllers
     public class EmployeesController : ControllerBase
     {
         private readonly IMediator _mediator;
+        private readonly IEmployeesRepository _employeesRepository;
 
-        public EmployeesController(IMediator mediator)
+        public EmployeesController(IMediator mediator, IEmployeesRepository employeesRepository)
         {
             _mediator = mediator;
+            _employeesRepository = employeesRepository;
         }
 
         [HttpGet]
-        public async Task<IActionResult> ListEmployees()
+        public async Task<IActionResult> GetEmployees()
         {
-            var response = await _mediator.Send(new GetAllEmployeeQuery());
-
-            return Ok(response);
+            try
+            {
+                var employees = await _employeesRepository.ListEmployees();
+                return Ok(new { isSuccess = true, data = employees });
+            }
+            catch (Exception ex)
+            {
+                // Maneja la excepción, tal vez loguearla
+                return StatusCode(500, new { isSuccess = false, message = ex.Message });
+            }
         }
     }
 }

@@ -13,6 +13,11 @@ a partir de un contenedor docker para facilitar el desarrollo de la misma.
 Cuando termine el desarrollo y se suba la última actualización se eliminará el contenedor.
 */
 
+
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+builder.Logging.AddDebug();
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("HotelConnectionString"));
