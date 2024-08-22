@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Hotel.UseCases.Employees.Queries.GetAllQuery
 {
-    public class GetAllEmployeeQuery : IRequest<BaseResponse<IEnumerable<GetEmployeesReponseDto>>>
+    public class GetAllEmployeeQuery : IRequest<BaseResponse<IEnumerable<GetEmployeesResponseDto>>>
     {
     }
 }

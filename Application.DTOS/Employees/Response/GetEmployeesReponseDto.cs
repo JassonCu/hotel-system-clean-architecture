@@ -1,6 +1,6 @@
 ﻿namespace Application.DTOS.Employees.Response
 {
-    public class GetEmployeesReponseDto
+    public class GetEmployeesResponseDto
     {
         public int EmployeeID { get; set; }
         public string? FirstName { get; set; }
