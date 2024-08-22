@@ -1,4 +1,5 @@
 using Hotel.Persistence.Context;
+using Hotel.Persistence.Extensions;
 using Hotel.UseCases.Extensions;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,8 +18,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("HotelConnectionString"));
 });
 
-var connectionString = builder.Configuration.GetConnectionString("HotelConnectionString");
-Console.WriteLine($"Connection String: {connectionString}");
+builder.Services.AddInyectionPersistence();
+
 
 
 builder.Services.AddControllers();
