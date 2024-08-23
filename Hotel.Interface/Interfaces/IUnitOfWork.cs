@@ -4,5 +4,5 @@ namespace Hotel.Interface.Interfaces;
 
 public interface IUnitOfWork
 {
-    IGenericRepository<Employee> Employees { get; }
+    IGenericRepository<Employee> Employee { get; }
 }
