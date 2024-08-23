@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Hotel.Interface\Hotel.Interface.csproj" />
+    <ProjectReference Include="..\Hotel.Utils\Hotel.Utils.csproj" />
   </ItemGroup>
 
 </Project>

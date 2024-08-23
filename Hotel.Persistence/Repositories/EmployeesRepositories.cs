@@ -2,6 +2,7 @@
 using Hotel.Domian.Entities;
 using Hotel.Interface.Interfaces;
 using Hotel.Persistence.Context;
+using Hotel.Utils.Constants;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -32,7 +33,7 @@ namespace Hotel.Persistence.Repositories
                     connection.Open();
                 }
 
-                var query = "uspEmployeesList";
+                var query = StoreProcedures.uspEmployeesList;
 
                 var employees = await connection.QueryAsync<Employee>(query, commandType: CommandType.StoredProcedure);
 
