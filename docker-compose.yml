@@ -1,0 +1,29 @@
+# Please refer https://aka.ms/HTTPSinContainer on how to setup an https developer certificate for your ASP.NET Core service.
+
+version: '3.9'
+
+services:
+  hotelapi:
+    image: hotelapi
+    build:
+      context: .
+      dockerfile: Hotel.Api/Dockerfile
+    ports:
+      - 5077:5077
+    depends_on:
+      - sqlserver
+    entrypoint: ["./wait-for-it.sh", "sqlserver:1433", "--", "dotnet", "Hotel.Api.dll"]
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    container_name: sqlserver
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Your_password_123
+    ports:
+      - 1433:1433
+    volumes:
+      - sqlserver-data:/var/opt/mssql
+
+volumes:
+  sqlserver-data:

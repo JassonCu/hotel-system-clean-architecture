@@ -1,0 +1,23 @@
+FROM mcr.microsoft.com/dotnet/aspnet:8.0-nanoserver-1809 AS base
+WORKDIR /app
+EXPOSE 5077
+
+ENV ASPNETCORE_URLS=http://+:5077
+
+FROM mcr.microsoft.com/dotnet/sdk:8.0-nanoserver-1809 AS build
+ARG configuration=Release
+WORKDIR /src
+COPY ["Hotel.Api/Hotel.Api.csproj", "Hotel.Api/"]
+RUN dotnet restore "Hotel.Api\Hotel.Api.csproj"
+COPY . .
+WORKDIR "/src/Hotel.Api"
+RUN dotnet build "Hotel.Api.csproj" -c $configuration -o /app/build
+
+FROM build AS publish
+ARG configuration=Release
+RUN dotnet publish "Hotel.Api.csproj" -c $configuration -o /app/publish /p:UseAppHost=false
+
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+ENTRYPOINT ["dotnet", "Hotel.Api.dll"]
