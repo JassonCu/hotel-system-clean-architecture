@@ -4,6 +4,7 @@
     {
         #region Employee Store Procedures
         public const string uspEmployeesList = "uspEmployeesList";
+        public const string uspAnalysisRegister = "uspAnalysisRegister";
         public const string uspEmployeeById = "uspEmployeeById";
         public const string uspEmployeeDelete = "uspEmployeeDelete";
         public const string uspEmployeeEdit = "uspEmployeeEdit";
