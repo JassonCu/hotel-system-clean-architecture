@@ -2,89 +2,59 @@
 
 ## **1. Introducción**
 
-El proyecto "Sistema de Hotel" está desarrollado utilizando ASP.NET Core 8 con un enfoque en la arquitectura limpia. La solución se divide en varias aplicaciones y capas para garantizar una estructura mantenible y escalable. El sistema utiliza SQL Server y se ejecuta en un contenedor Docker.
+El proyecto "Sistema de Hotel" está desarrollado utilizando **ASP.NET Core 8** con un enfoque en la **arquitectura limpia**. La solución está dividida en las siguientes aplicaciones y capas para garantizar una estructura mantenible y escalable. El sistema utiliza **Oracle Database** y se ejecuta en un contenedor **Docker**.
 
 ## **2. Estructura del Proyecto**
 
-El proyecto se divide en las siguientes aplicaciones y capas:
+El proyecto está dividido en las siguientes capas y aplicaciones:
 
-- **Application.DTOS**
 - **Hotel.Api**
-- **Hotel.Client**
-- **Hotel.Domain**
+- **Hotel.Client** (MVC)
+- **Hotel.Core**
 - **Hotel.Infrastructure**
-- **Hotel.Interface**
-- **Hotel.Persistence**
-- **Hotel.UseCases**
-- **Hotel.Utils**
 
-### **2.1 Application.DTOS**
+### **2.1 Hotel.Api**
 
-- **Descripción**: Contiene los Data Transfer Objects (DTOs) utilizados para la transferencia de datos entre las capas de la aplicación.
-- **Propósito**: Facilitar la comunicación entre la capa de presentación y la capa de aplicación sin exponer las entidades del dominio directamente.
+- **Descripción**: La API del sistema de hotel que expone los endpoints para interactuar con la aplicación.
+- **Propósito**: Proporciona una interfaz pública para que los clientes (como el cliente MVC) puedan interactuar con el sistema a través de solicitudes HTTP.
 
-### **2.2 Hotel.Api**
+### **2.2 Hotel.Client**
 
-- **Descripción**: La API de la aplicación que expone los endpoints para interactuar con el sistema de hotel.
-- **Propósito**: Actuar como interfaz pública para que los clientes puedan acceder a las funcionalidades del sistema a través de solicitudes HTTP.
+- **Descripción**: Aplicación cliente basada en el patrón **MVC** (Model-View-Controller) que interactúa con la API del sistema de hotel.
+- **Propósito**: Proporciona una interfaz de usuario para que los clientes puedan interactuar con el sistema de hotel mediante una aplicación web.
 
-### **2.3 Hotel.Client**
+### **2.3 Hotel.Core**
 
-- **Descripción**: Aplicación cliente basada en MVC que interactúa con la API del sistema de hotel.
-- **Propósito**: Proporcionar una interfaz de usuario para que los clientes puedan interactuar con el sistema de hotel mediante una aplicación web.
+- **Descripción**: Contiene las entidades del dominio, reglas de negocio y lógica del dominio.
+- **Propósito**: Representa el núcleo de la aplicación, donde se define la lógica de negocio y las entidades principales (modelos de negocio).
 
-### **2.4 Hotel.Domain**
+### **2.4 Hotel.Infrastructure**
 
-- **Descripción**: Contiene las entidades del dominio, reglas de negocio y lógica de dominio.
-- **Propósito**: Representar el núcleo de la aplicación, donde se define la lógica de negocio y las entidades principales.
-
-### **2.5 Hotel.Infrastructure**
-
-- **Descripción**: Implementaciones específicas de infraestructura, como servicios de terceros, configuración de dependencias y otros componentes que interactúan con el entorno externo.
-- **Propósito**: Proporcionar las implementaciones concretas que interactúan con el sistema de archivos, servicios externos y otros recursos de infraestructura.
-
-### **2.6 Hotel.Interface**
-
-- **Descripción**: Define las interfaces que serán implementadas por la capa de infraestructura y utilizadas en la capa de aplicación.
-- **Propósito**: Asegurar una separación clara entre la lógica de negocio y las implementaciones concretas, facilitando la inyección de dependencias.
-
-### **2.7 Hotel.Persistence**
-
-- **Descripción**: Contiene la implementación de acceso a datos, incluyendo repositorios y contexto de base de datos.
-- **Propósito**: Manejar la persistencia de datos y la comunicación con la base de datos.
-
-### **2.8 Hotel.UseCases**
-
-- **Descripción**: Contiene la lógica específica de los casos de uso de la aplicación.
-- **Propósito**: Implementar los casos de uso específicos de la aplicación que encapsulan la lógica de negocio y coordinan la interacción entre la capa de dominio y la capa de presentación.
-
-### **2.9 Hotel.Utils**
-
-- **Descripción**: Contiene utilidades y helpers generales que pueden ser utilizados en diversas partes del proyecto.
-- **Propósito**: Proveer funcionalidades auxiliares y comunes que no encajan en otras capas del proyecto.
+- **Descripción**: Contiene las implementaciones específicas de infraestructura, como el acceso a la base de datos y otros servicios externos.
+- **Propósito**: Proporcionar implementaciones concretas de la lógica de negocio definida en **Core**, como el acceso a datos y la configuración del entorno (por ejemplo, conexión a la base de datos Oracle).
 
 ## **3. Flujo de Datos**
 
-1. **Interacción del Cliente**: El usuario interactúa con la aplicación cliente basada en MVC, que realiza solicitudes a la API.
-2. **Solicitud a la API**: La API recibe la solicitud y, a través de los casos de uso, invoca las operaciones necesarias.
-3. **Lógica de Aplicación**: Los casos de uso interactúan con las entidades del dominio para realizar la lógica de negocio.
-4. **Persistencia de Datos**: Los casos de uso pueden solicitar la persistencia o recuperación de datos a través de los repositorios implementados en la capa de persistencia.
-5. **Respuesta al Cliente**: La API devuelve la respuesta al cliente, que es luego presentada en la interfaz de usuario.
+1. **Interacción del Cliente MVC**: El usuario interactúa con la interfaz proporcionada por el cliente MVC, que realiza solicitudes HTTP a la API.
+2. **Solicitud a la API**: La API recibe la solicitud y, mediante los servicios de la capa **Infrastructure**, ejecuta las operaciones necesarias.
+3. **Lógica de Aplicación**: La API delega las tareas de negocio en la capa **Core**, que maneja la lógica del dominio.
+4. **Persistencia de Datos**: En caso de ser necesario, la capa **Infrastructure** interactúa con la base de datos Oracle para almacenar o recuperar los datos.
+5. **Respuesta al Cliente MVC**: La API devuelve los resultados al cliente MVC para que sean presentados al usuario.
 
 ## **4. Configuración y Despliegue**
 
 ### **4.1 Requisitos del Sistema**
 
 - **.NET Core 8**: Asegúrate de tener la versión 8 de .NET Core instalada.
-- **SQL Server**: Se utiliza SQL Server para la gestión de la base de datos.
-- **Docker**: Se utiliza Docker para contenerizar la aplicación y la base de datos.
+- **Oracle Database**: La base de datos utilizada es **Oracle Database**.
+- **Docker**: Docker se utiliza para contenerizar tanto la aplicación como la base de datos.
 
 ### **4.2 Configuración**
 
 #### **Base de Datos**
 
-1. **SQL Server**: La base de datos SQL Server se encuentra en un contenedor Docker. Asegúrate de que el contenedor esté ejecutándose y accesible para la aplicación.
-2. **Cadena de Conexión**: Configura la cadena de conexión en el archivo `appsettings.json` de la API para apuntar al contenedor de SQL Server.
+1. **Oracle Database**: La base de datos Oracle debe estar configurada y accesible para la aplicación. Si se usa Docker, asegúrate de tener un contenedor Oracle en ejecución.
+2. **Cadena de Conexión**: Configura la cadena de conexión en el archivo `appsettings.json` de la API para apuntar a la base de datos Oracle.
 
    ```json
    {
@@ -96,14 +66,14 @@ El proyecto se divide en las siguientes aplicaciones y capas:
      },
      "AllowedHosts": "*",
      "ConnectionStrings": {
-       "HotelConnectionString": "Server=localhost,1433;Database=HotelSystemExample;User Id=sa;Password=J@ss0n___123;TrustServerCertificate=True;"
+       "HotelConnectionString": "User Id=usuario;Password=contraseña;Data Source=localhost:1521/ORCL;"
      }
    }
    ```
 
 #### **Docker**
 
-1. **Dockerfile**: Asegúrate de tener el siguiente `Dockerfile` para la aplicación `Hotel.Api`:
+1. **Dockerfile**: Asegúrate de tener el siguiente `Dockerfile` para la aplicación **Hotel.Api**:
 
    ```Dockerfile
    # Use the ASP.NET Core runtime image as the base image
@@ -118,7 +88,7 @@ El proyecto se divide en las siguientes aplicaciones y capas:
    WORKDIR /src
    COPY ["Hotel.Api/Hotel.Api.csproj", "Hotel.Api/"]
    RUN dotnet restore "Hotel.Api/Hotel.Api.csproj"
-   COPY . .
+   COPY . . 
    WORKDIR "/src/Hotel.Api"
    RUN dotnet build "Hotel.Api.csproj" -c $configuration -o /app/build
 
@@ -130,11 +100,11 @@ El proyecto se divide en las siguientes aplicaciones y capas:
    # Define the final image
    FROM base AS final
    WORKDIR /app
-   COPY --from=publish /app/publish .
+   COPY --from=publish /app/publish . 
    ENTRYPOINT ["dotnet", "Hotel.Api.dll"]
    ```
 
-2. **docker-compose.yml**: Utiliza el siguiente archivo `docker-compose.yml` para definir y ejecutar los contenedores.
+2. **docker-compose.yml**: Utiliza el siguiente archivo `docker-compose.yml` para definir y ejecutar los contenedores:
 
    ```yaml
    version: '3.9'
@@ -148,25 +118,24 @@ El proyecto se divide en las siguientes aplicaciones y capas:
        ports:
          - 5077:5077
        depends_on:
-         - sqlserver
-       entrypoint: ["./wait-for-it.sh", "sqlserver:1433", "--", "dotnet", "Hotel.Api.dll"]
+         - oracle
+       entrypoint: ["./wait-for-it.sh", "oracle:1521", "--", "dotnet", "Hotel.Api.dll"]
 
-     sqlserver:
-       image: mcr.microsoft.com/mssql/server:2019-latest
-       container_name: sqlserver
+     oracle:
+       image: gvenzl/oracle-xe:latest
+       container_name: oracle
        environment:
-         - ACCEPT_EULA=Y
-         - SA_PASSWORD=Your_password_123
+         - ORACLE_PASSWORD=Your_password_123
        ports:
-         - 1433:1433
+         - 1521:1521
        volumes:
-         - sqlserver-data:/var/opt/mssql
+         - oracle-data:/opt/oracle/oradata
 
    volumes:
-     sqlserver-data:
+     oracle-data:
    ```
 
-3. **wait-for-it.sh**: Este script asegura que la API espere hasta que SQL Server esté disponible antes de iniciar.
+3. **wait-for-it.sh**: Este script asegura que la API espere hasta que Oracle esté disponible antes de iniciar.
 
    ```bash
    #!/usr/bin/env bash
@@ -177,12 +146,12 @@ El proyecto se divide en las siguientes aplicaciones y capas:
    shift
    cmd="$@"
 
-   until nc -z "$host" 1433; do
-     >&2 echo "SQL Server is unavailable - sleeping"
+   until nc -z "$host" 1521; do
+     >&2 echo "Oracle Database is unavailable - sleeping"
      sleep 1
    done
 
-   >&2 echo "SQL Server is up - executing command"
+   >&2 echo "Oracle Database is up - executing command"
    exec $cmd
    ```
 

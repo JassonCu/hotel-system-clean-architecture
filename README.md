@@ -2,89 +2,59 @@
 
 ## **1. Introduction**
 
-The "Hotel System" project is developed using ASP.NET Core 8 with a focus on Clean Architecture. The solution is divided into several applications and layers to ensure a maintainable and scalable structure. The system uses SQL Server and runs in a Docker container.
+The **Hotel System** project is developed using **ASP.NET Core 8** with an emphasis on **Clean Architecture**. The solution is divided into the following applications and layers to ensure a maintainable and scalable structure. The system uses **Oracle Database** and runs in a **Docker** container.
 
 ## **2. Project Structure**
 
-The project is divided into the following applications and layers:
+The project is divided into the following layers and applications:
 
-- **Application.DTOS**
 - **Hotel.Api**
-- **Hotel.Client**
-- **Hotel.Domain**
+- **Hotel.Client** (MVC)
+- **Hotel.Core**
 - **Hotel.Infrastructure**
-- **Hotel.Interface**
-- **Hotel.Persistence**
-- **Hotel.UseCases**
-- **Hotel.Utils**
 
-### **2.1 Application.DTOS**
+### **2.1 Hotel.Api**
 
-- **Description**: Contains the Data Transfer Objects (DTOs) used for data transfer between application layers.
-- **Purpose**: Facilitate communication between the presentation layer and the application layer without exposing domain entities directly.
+- **Description**: The API for the hotel system that exposes endpoints for interacting with the application.
+- **Purpose**: Provides a public interface for clients (such as the MVC client) to interact with the system via HTTP requests.
 
-### **2.2 Hotel.Api**
+### **2.2 Hotel.Client**
 
-- **Description**: The API of the application that exposes endpoints to interact with the hotel system.
-- **Purpose**: Serve as the public interface for clients to access the system’s functionalities through HTTP requests.
+- **Description**: A client application based on the **MVC** (Model-View-Controller) pattern that interacts with the Hotel System API.
+- **Purpose**: Provides a user interface for clients to interact with the hotel system through a web application.
 
-### **2.3 Hotel.Client**
-
-- **Description**: MVC-based client application that interacts with the hotel system API.
-- **Purpose**: Provide a user interface for clients to interact with the hotel system through a web application.
-
-### **2.4 Hotel.Domain**
+### **2.3 Hotel.Core**
 
 - **Description**: Contains domain entities, business rules, and domain logic.
-- **Purpose**: Represent the core of the application, defining business logic and main entities.
+- **Purpose**: Represents the core of the application, where the business logic and main entities (business models) are defined.
 
-### **2.5 Hotel.Infrastructure**
+### **2.4 Hotel.Infrastructure**
 
-- **Description**: Contains specific infrastructure implementations, such as third-party services, dependency configurations, and other components interacting with the external environment.
-- **Purpose**: Provide concrete implementations that interact with file systems, external services, and other infrastructure resources.
-
-### **2.6 Hotel.Interface**
-
-- **Description**: Defines interfaces that will be implemented by the infrastructure layer and used in the application layer.
-- **Purpose**: Ensure a clear separation between business logic and concrete implementations, facilitating dependency injection.
-
-### **2.7 Hotel.Persistence**
-
-- **Description**: Contains data access implementations, including repositories and database context.
-- **Purpose**: Handle data persistence and communication with the database.
-
-### **2.8 Hotel.UseCases**
-
-- **Description**: Contains specific use case logic of the application.
-- **Purpose**: Implement specific application use cases that encapsulate business logic and coordinate interactions between the domain layer and the presentation layer.
-
-### **2.9 Hotel.Utils**
-
-- **Description**: Contains general utilities and helpers that can be used in various parts of the project.
-- **Purpose**: Provide auxiliary and common functionalities that do not fit into other project layers.
+- **Description**: Contains specific infrastructure implementations, such as database access and other external services.
+- **Purpose**: Provides concrete implementations of the business logic defined in **Core**, such as data access and environment configuration (e.g., connection to the Oracle database).
 
 ## **3. Data Flow**
 
-1. **Client Interaction**: The user interacts with the MVC-based client application, which sends requests to the API.
-2. **API Request**: The API receives the request and, through the use cases, invokes the necessary operations.
-3. **Application Logic**: The use cases interact with domain entities to perform business logic.
-4. **Data Persistence**: Use cases may request data persistence or retrieval through repositories implemented in the persistence layer.
-5. **Client Response**: The API returns the response to the client, which is then presented in the user interface.
+1. **MVC Client Interaction**: The user interacts with the interface provided by the MVC client, which makes HTTP requests to the API.
+2. **API Request**: The API receives the request and, using services from the **Infrastructure** layer, performs the necessary operations.
+3. **Application Logic**: The API delegates business tasks to the **Core** layer, which handles the domain logic.
+4. **Data Persistence**: If necessary, the **Infrastructure** layer interacts with the Oracle database to store or retrieve data.
+5. **Response to MVC Client**: The API returns the results to the MVC client for display to the user.
 
 ## **4. Configuration and Deployment**
 
 ### **4.1 System Requirements**
 
-- **.NET Core 8**: Ensure you have .NET Core version 8 installed.
-- **SQL Server**: SQL Server is used for database management.
-- **Docker**: Docker is used to containerize the application and database.
+- **.NET Core 8**: Ensure that version 8 of .NET Core is installed.
+- **Oracle Database**: The database used is **Oracle Database**.
+- **Docker**: Docker is used to containerize both the application and the database.
 
 ### **4.2 Configuration**
 
 #### **Database**
 
-1. **SQL Server**: The SQL Server database is running in a Docker container. Ensure that the container is running and accessible to the application.
-2. **Connection String**: Configure the connection string in the `appsettings.json` file of the API to point to the SQL Server container.
+1. **Oracle Database**: The Oracle database must be configured and accessible to the application. If using Docker, ensure that an Oracle container is running.
+2. **Connection String**: Configure the connection string in the `appsettings.json` file of the API to point to the Oracle database.
 
    ```json
    {
@@ -96,14 +66,14 @@ The project is divided into the following applications and layers:
      },
      "AllowedHosts": "*",
      "ConnectionStrings": {
-       "HotelConnectionString": "Server=localhost,1433;Database=HotelSystemExample;User Id=sa;Password=J@ss0n___123;TrustServerCertificate=True;"
+       "HotelConnectionString": "User Id=username;Password=password;Data Source=localhost:1521/ORCL;"
      }
    }
    ```
 
 #### **Docker**
 
-1. **Dockerfile**: Ensure you have the following `Dockerfile` for the `Hotel.Api` application:
+1. **Dockerfile**: Ensure that the following `Dockerfile` is used for the **Hotel.Api** application:
 
    ```Dockerfile
    # Use the ASP.NET Core runtime image as the base image
@@ -118,7 +88,7 @@ The project is divided into the following applications and layers:
    WORKDIR /src
    COPY ["Hotel.Api/Hotel.Api.csproj", "Hotel.Api/"]
    RUN dotnet restore "Hotel.Api/Hotel.Api.csproj"
-   COPY . .
+   COPY . . 
    WORKDIR "/src/Hotel.Api"
    RUN dotnet build "Hotel.Api.csproj" -c $configuration -o /app/build
 
@@ -130,11 +100,11 @@ The project is divided into the following applications and layers:
    # Define the final image
    FROM base AS final
    WORKDIR /app
-   COPY --from=publish /app/publish .
+   COPY --from=publish /app/publish . 
    ENTRYPOINT ["dotnet", "Hotel.Api.dll"]
    ```
 
-2. **docker-compose.yml**: Use the following `docker-compose.yml` file to define and run the containers.
+2. **docker-compose.yml**: Use the following `docker-compose.yml` file to define and run the containers:
 
    ```yaml
    version: '3.9'
@@ -148,25 +118,24 @@ The project is divided into the following applications and layers:
        ports:
          - 5077:5077
        depends_on:
-         - sqlserver
-       entrypoint: ["./wait-for-it.sh", "sqlserver:1433", "--", "dotnet", "Hotel.Api.dll"]
+         - oracle
+       entrypoint: ["./wait-for-it.sh", "oracle:1521", "--", "dotnet", "Hotel.Api.dll"]
 
-     sqlserver:
-       image: mcr.microsoft.com/mssql/server:2019-latest
-       container_name: sqlserver
+     oracle:
+       image: gvenzl/oracle-xe:latest
+       container_name: oracle
        environment:
-         - ACCEPT_EULA=Y
-         - SA_PASSWORD=Your_password_123
+         - ORACLE_PASSWORD=Your_password_123
        ports:
-         - 1433:1433
+         - 1521:1521
        volumes:
-         - sqlserver-data:/var/opt/mssql
+         - oracle-data:/opt/oracle/oradata
 
    volumes:
-     sqlserver-data:
+     oracle-data:
    ```
 
-3. **wait-for-it.sh**: This script ensures that the API waits until SQL Server is available before starting.
+3. **wait-for-it.sh**: This script ensures that the API waits until Oracle is available before starting.
 
    ```bash
    #!/usr/bin/env bash
@@ -177,16 +146,16 @@ The project is divided into the following applications and layers:
    shift
    cmd="$@"
 
-   until nc -z "$host" 1433; do
-     >&2 echo "SQL Server is unavailable - sleeping"
+   until nc -z "$host" 1521; do
+     >&2 echo "Oracle Database is unavailable - sleeping"
      sleep 1
    done
 
-   >&2 echo "SQL Server is up - executing command"
+   >&2 echo "Oracle Database is up - executing command"
    exec $cmd
    ```
 
-   **Note**: Make sure to run `chmod +x wait-for-it.sh` to make the script executable.
+   **Note**: Be sure to run `chmod +x wait-for-it.sh` to make the script executable.
 
 ### **4.3 Deployment**
 
@@ -197,13 +166,13 @@ The project is divided into the following applications and layers:
    docker-compose up
    ```
 
-2. **Production Deployment**: Configure the production environment by adjusting Docker configurations and application configuration files as needed.
+2. **Production Deployment**: Configure the production environment by adjusting Docker configurations and application settings as necessary.
 
-## **5. Contributing**
+## **5. Contributions**
 
 - **Contribution Guidelines**: Instructions for developers who wish to contribute to the project, including coding standards and the pull request process.
-- **Code of Conduct**: Guidelines and expectations for contributor behavior.
+- **Code of Conduct**: Rules and expectations for contributor behavior.
 
 ## **6. License**
 
-- **License Type**: MIT
+- **License Type**: MIT.
