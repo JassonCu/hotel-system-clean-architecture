@@ -5,6 +5,11 @@ builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 builder.Logging.AddDebug();
 
+builder.Services.AddAuthorization();
+builder.Services.AddControllers();
+builder.Services.AddControllersWithViews();
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
